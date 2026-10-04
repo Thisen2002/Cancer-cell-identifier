@@ -1,5 +1,3 @@
-"""Image preprocessing and normalization routines."""
-
 """
 preprocessing.py
 
@@ -96,3 +94,54 @@ def get_eval_transforms(
     return transforms.Compose(
         [
             transforms.Lambda(ensure_rgb),
+            transforms.Resize(image_size),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=IMAGENET_MEAN,
+                std=IMAGENET_STD,
+            ),
+        ]
+    )
+
+
+def get_inference_transforms(
+    image_size: Tuple[int, int] = DEFAULT_IMAGE_SIZE,
+) -> transforms.Compose:
+    """Return the same deterministic preprocessing used for validation/testing."""
+    return get_eval_transforms(image_size=image_size)
+
+
+def denormalize_tensor(
+    tensor: torch.Tensor,
+    mean: Sequence[float] = IMAGENET_MEAN,
+    std: Sequence[float] = IMAGENET_STD,
+) -> torch.Tensor:
+    """
+    Reverse normalization for visualization in notebooks or Grad-CAM outputs.
+
+    Parameters
+    ----------
+    tensor:
+        Image tensor with shape [C, H, W].
+
+    Returns
+    -------
+    torch.Tensor
+        Approximate image tensor restored to the [0,1] range.
+    """
+    if tensor.ndim != 3:
+        raise ValueError(
+            f"Expected tensor shape [C, H, W], got {tuple(tensor.shape)}"
+        )
+
+    mean_tensor = torch.tensor(
+        mean, dtype=tensor.dtype, device=tensor.device
+    ).view(-1, 1, 1)
+    std_tensor = torch.tensor(
+        std, dtype=tensor.dtype, device=tensor.device
+    ).view(-1, 1, 1)
+
+    image = tensor * std_tensor + mean_tensor
+
+    # Clamp small numerical overshoots before displaying the image.
+    return image.clamp(0.0, 1.0)
