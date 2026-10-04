@@ -1,0 +1,4 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}\\tvt-scc-ai\\.venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true
+}

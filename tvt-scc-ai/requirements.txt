@@ -1,11 +1,17 @@
 torch>=2.0.0
 torchvision>=0.15.0
+
 numpy
 pandas
 scikit-learn
+
 matplotlib
 opencv-python
+Pillow
+
 grad-cam
+
 streamlit
 jupyter
 pyyaml
+tqdm

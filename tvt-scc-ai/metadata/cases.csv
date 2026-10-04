@@ -1,1 +1,1 @@
-case_id,patient_id,diagnosis,image_filename,split
+case_id,diagnosis,image_id,stain,magnification,site,confirmation_method,image_path
