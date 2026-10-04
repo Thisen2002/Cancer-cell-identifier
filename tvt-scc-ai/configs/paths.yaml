@@ -1,0 +1,6 @@
+# Project File Paths
+raw_data_dir: "data/raw"
+processed_data_dir: "data/processed"
+metadata_path: "metadata/cases.csv"
+model_checkpoint_dir: "models"
+results_dir: "results"
